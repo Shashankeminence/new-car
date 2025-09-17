@@ -10,3 +10,7 @@
 2025-09-17 15:10:20,773 - app.service - INFO - MOCK RESPONSE: Hello! I'm here to help you find the perfect car. Are you looking to rent for a trip or buy a vehicle? Let me know your preferences and I'll guide you through the options.
 2025-09-17 15:10:20,773 - app.main - INFO - [f9abb33f] USER QUESTION: Stream please
 2025-09-17 15:10:20,773 - app.main - INFO - [f9abb33f] AGENT RESPONSE: Hello! I'm here to help you find the perfect car. Are you looking to rent for a trip or buy a vehicle? Let me know your preferences and I'll guide you through the options.
+2025-09-17 15:25:16,359 - app.service - INFO - USER QUESTION: Hello
+2025-09-17 15:25:16,363 - app.service - INFO - MOCK RESPONSE: Hi! Welcome to MyCarCar. Are you looking to rent a car or explore our sales options?
+2025-09-17 15:25:16,363 - app.main - INFO - [92190e69] USER QUESTION: Hello
+2025-09-17 15:25:16,364 - app.main - INFO - [92190e69] AGENT RESPONSE: Hi! Welcome to MyCarCar. Are you looking to rent a car or explore our sales options?

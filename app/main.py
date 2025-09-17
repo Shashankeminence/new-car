@@ -11,6 +11,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel, Field, ValidationError
+from pydantic import ConfigDict
 
 from .service import AgentService
 
@@ -73,6 +74,7 @@ class Message(BaseModel):
     )
 
 class ChatCompletionRequest(BaseModel):
+    model_config = ConfigDict(extra="allow")
     messages: List[Message] = Field(description="List of conversation messages")
     model: str = Field(description="The model to use", example="gpt-4o-mini")
     temperature: Optional[float] = Field(default=0.7, description="Sampling temperature", example=0.7)
