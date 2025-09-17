@@ -46,15 +46,36 @@ class AgentService:
         print("✅ AgentService initialization complete")
 
     def chat(self, user_message: str, context_messages: Optional[List[Dict[str, str]]] = None, elevenlabs_extra_body: Optional[Dict[str, Any]] = None) -> str:
-        print(f"\n💬 AgentService.chat() called")
-        print(f"📝 User message: '{user_message}'")
-        print(f"📚 Context messages: {len(context_messages) if context_messages else 0}")
-        print(f"🔧 ElevenLabs extra body: {elevenlabs_extra_body}")
+        print(f"\n" + "="*60)
+        print(f"💬 AgentService.chat() called")
+        print(f"="*60)
+        print(f"📝 USER QUESTION:")
+        print(f"   '{user_message}'")
+        print(f"   Length: {len(user_message)} characters")
+        print(f"   Word count: {len(user_message.split())} words")
+        print(f"\n📚 CONTEXT MESSAGES: {len(context_messages) if context_messages else 0}")
+        if context_messages:
+            for i, ctx in enumerate(context_messages):
+                print(f"   [{i+1}] {ctx['role']}: {ctx['content'][:100]}{'...' if len(ctx['content']) > 100 else ''}")
+        
+        print(f"\n🔧 ELEVENLABS EXTRA BODY: {elevenlabs_extra_body}")
         
         if self.mock:
-            print("🎭 Using mock response")
+            print(f"\n🎭 USING MOCK RESPONSE MODE")
             response = self._get_mock_response(user_message)
-            print(f"🎭 Mock response: '{response[:100]}{'...' if len(response) > 100 else ''}'")
+            print(f"\n🎭 MOCK RESPONSE GENERATED:")
+            print(f"="*60)
+            print(f"📝 Response: '{response}'")
+            print(f"📊 Response stats:")
+            print(f"   - Length: {len(response)} characters")
+            print(f"   - Word count: {len(response.split())} words")
+            print(f"   - Lines: {len(response.splitlines())} lines")
+            print(f"="*60)
+            
+            # Log to file
+            logger.info(f"USER QUESTION: {user_message}")
+            logger.info(f"MOCK RESPONSE: {response}")
+            
             return response
         
         try:
@@ -65,15 +86,24 @@ class AgentService:
                 messages.extend(context_messages)
             messages.append({"role": "user", "content": user_message})
 
-            print(f"📋 Prepared messages for OpenAI:")
+            print(f"\n📋 PREPARED MESSAGES FOR OPENAI:")
+            print(f"-" * 50)
             for i, msg in enumerate(messages):
-                print(f"   [{i+1}] {msg['role']}: {msg['content'][:100]}{'...' if len(msg['content']) > 100 else ''}")
+                print(f"   Message {i+1}:")
+                print(f"   ├─ Role: '{msg['role']}'")
+                print(f"   ├─ Content: '{msg['content'][:100]}{'...' if len(msg['content']) > 100 else ''}'")
+                print(f"   └─ Length: {len(msg['content'])} characters")
+                print()
 
             # Log ElevenLabs extra body for debugging
             if elevenlabs_extra_body:
                 print(f"🔧 ElevenLabs extra body: {elevenlabs_extra_body}")
 
-            print("🚀 Calling OpenAI API...")
+            print(f"\n🚀 CALLING OPENAI API...")
+            print(f"   - Model: {self.model}")
+            print(f"   - Temperature: 0.3")
+            print(f"   - Max tokens: 500")
+            
             # Call OpenAI API
             response = self.client.chat.completions.create(  # type: ignore
                 model=self.model,
@@ -82,8 +112,23 @@ class AgentService:
                 max_tokens=500,  # Limit tokens for faster response
             )
             content = response.choices[0].message.content if response.choices else ""
-            print(f"✅ OpenAI response received: '{content[:100]}{'...' if len(content) > 100 else ''}'")
-            logger.info(f"OpenAI response received: {content[:100]}...")
+            
+            print(f"\n✅ OPENAI API RESPONSE RECEIVED:")
+            print(f"="*60)
+            print(f"📝 Response: '{content}'")
+            print(f"📊 Response stats:")
+            print(f"   - Length: {len(content)} characters")
+            print(f"   - Word count: {len(content.split())} words")
+            print(f"   - Lines: {len(content.splitlines())} lines")
+            print(f"   - Finish reason: {response.choices[0].finish_reason if response.choices else 'N/A'}")
+            print(f"   - Usage: {response.usage.dict() if hasattr(response, 'usage') and response.usage else 'N/A'}")
+            print(f"="*60)
+            
+            # Log to file
+            logger.info(f"USER QUESTION: {user_message}")
+            logger.info(f"OPENAI RESPONSE: {content}")
+            if hasattr(response, 'usage') and response.usage:
+                logger.info(f"OPENAI USAGE: {response.usage.dict()}")
             
             if not content:
                 print("⚠️ Empty response from OpenAI, using fallback")
@@ -92,13 +137,22 @@ class AgentService:
             return content
             
         except Exception as e:
-            print(f"❌ OpenAI API error: {e}")
+            print(f"\n❌ OPENAI API ERROR:")
+            print(f"="*60)
+            print(f"Error: {e}")
+            print(f"Error type: {type(e).__name__}")
+            print(f"="*60)
+            
             logger.error(f"OpenAI API error: {e}")
+            logger.error(f"Error type: {type(e).__name__}")
+            
             return self._get_fallback_response(user_message)
 
     def _get_fallback_response(self, user_message: str) -> str:
         """Fallback response when OpenAI API fails"""
-        print(f"🔄 Using fallback response for: '{user_message[:50]}{'...' if len(user_message) > 50 else ''}'")
+        print(f"\n🔄 USING FALLBACK RESPONSE")
+        print(f"-" * 40)
+        print(f"Original question: '{user_message[:50]}{'...' if len(user_message) > 50 else ''}'")
         
         message_lower = user_message.lower()
         
@@ -109,12 +163,21 @@ class AgentService:
         else:
             response = "Hi! I'm Alex from MyCarCar. I can help you with car rentals and sales. How can I assist you today?"
         
-        print(f"🔄 Fallback response: '{response}'")
+        print(f"Fallback response: '{response}'")
+        print(f"Response length: {len(response)} characters")
+        print(f"-" * 40)
+        
+        # Log to file
+        logger.info(f"FALLBACK - USER QUESTION: {user_message}")
+        logger.info(f"FALLBACK - RESPONSE: {response}")
+        
         return response
 
     def _get_mock_response(self, user_message: str) -> str:
         """Generate contextual mock responses based on user input"""
-        print(f"🎭 Generating mock response for: '{user_message[:50]}{'...' if len(user_message) > 50 else ''}'")
+        print(f"\n🎭 GENERATING MOCK RESPONSE")
+        print(f"-" * 40)
+        print(f"User question: '{user_message[:50]}{'...' if len(user_message) > 50 else ''}'")
         
         message_lower = user_message.lower()
         
@@ -194,5 +257,8 @@ class AgentService:
             ]
             response = random.choice(responses)
         
-        print(f"🎭 Mock response generated: '{response[:100]}{'...' if len(response) > 100 else ''}'")
+        print(f"Mock response: '{response[:100]}{'...' if len(response) > 100 else ''}'")
+        print(f"Response length: {len(response)} characters")
+        print(f"-" * 40)
+        
         return response

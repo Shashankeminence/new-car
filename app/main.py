@@ -80,21 +80,36 @@ class ChatCompletionRequest(BaseModel):
 async def create_chat_completion(request: ChatCompletionRequest):
     """ElevenLabs compatible endpoint with proper streaming and non-streaming support"""
     request_id = str(uuid.uuid4())[:8]
-    print(f"\n🎯 [{request_id}] NEW REQUEST RECEIVED")
+    
+    # Enhanced logging for incoming requests
+    print(f"\n" + "="*80)
+    print(f"🎯 [{request_id}] NEW REQUEST RECEIVED")
+    print(f"="*80)
     print(f"📊 [{request_id}] Request details:")
     print(f"   - Model: {request.model}")
     print(f"   - Stream: {request.stream}")
     print(f"   - Messages count: {len(request.messages)}")
     print(f"   - Temperature: {request.temperature}")
     print(f"   - Max tokens: {request.max_tokens}")
+    print(f"   - User ID: {request.user_id}")
     print(f"   - ElevenLabs extra body: {request.elevenlabs_extra_body}")
+    
+    # Log all messages in detail
+    print(f"\n📝 [{request_id}] DETAILED MESSAGE BREAKDOWN:")
+    print(f"-" * 50)
+    for i, msg in enumerate(request.messages):
+        print(f"   Message {i+1}:")
+        print(f"   ├─ Role: '{msg.role}'")
+        print(f"   ├─ Content: '{msg.content}'")
+        print(f"   └─ Length: {len(msg.content)} characters")
+        print()
     
     try:
         # Extract the latest user message - be more flexible
         user_message = ""
         context_messages = []
         
-        print(f"📝 [{request_id}] Processing messages:")
+        print(f"💬 [{request_id}] Processing messages:")
         for i, msg in enumerate(request.messages):
             print(f"   [{i+1}] Role: '{msg.role}', Content: '{msg.content[:100]}{'...' if len(msg.content) > 100 else ''}'")
             
@@ -103,7 +118,9 @@ async def create_chat_completion(request: ChatCompletionRequest):
             elif msg.role in ["assistant", "system"]:
                 context_messages.append({"role": msg.role, "content": msg.content})
         
-        print(f"💬 [{request_id}] Found user_message: '{user_message}'")
+        print(f"\n🎯 [{request_id}] EXTRACTED USER MESSAGE:")
+        print(f"   '{user_message}'")
+        print(f"   Length: {len(user_message)} characters")
         
         # If no user message found, try to get the last message regardless of role
         if not user_message and request.messages:
@@ -119,22 +136,38 @@ async def create_chat_completion(request: ChatCompletionRequest):
         response_id = f"chatcmpl-{uuid.uuid4().hex[:29]}"
         current_time = int(time.time())
         
-        print(f"🤖 [{request_id}] Calling agent service...")
+        print(f"\n🤖 [{request_id}] CALLING AGENT SERVICE...")
+        print(f"   - Context messages: {len(context_messages)}")
+        print(f"   - ElevenLabs extra body: {request.elevenlabs_extra_body}")
+        
         # Get response from agent with proper error handling
         try:
             reply = get_agent_service().chat(user_message, context_messages, request.elevenlabs_extra_body)
-            print(f"✅ [{request_id}] Agent reply received: '{reply[:100]}{'...' if len(reply) > 100 else ''}'")
+            
+            print(f"\n✅ [{request_id}] AGENT RESPONSE RECEIVED:")
+            print(f"="*60)
+            print(f"📝 Response: '{reply}'")
+            print(f"📊 Response stats:")
+            print(f"   - Length: {len(reply)} characters")
+            print(f"   - Word count: {len(reply.split())} words")
+            print(f"   - Lines: {len(reply.splitlines())} lines")
+            print(f"="*60)
+            
+            # Log to file as well
+            logger.info(f"[{request_id}] USER QUESTION: {user_message}")
+            logger.info(f"[{request_id}] AGENT RESPONSE: {reply}")
+            
         except Exception as e:
             print(f"⚠️ [{request_id}] Agent service error: {e}")
             logger.error(f"Agent service error for request {request_id}: {e}")
             # Fallback response for ElevenLabs
             reply = "I'm Alex from MyCarCar. I can help you with car rentals and sales. How can I assist you today?"
-            print(f"🔄 [{request_id}] Using fallback response")
+            print(f"🔄 [{request_id}] Using fallback response: '{reply}'")
         
         # Ensure reply is not empty
         if not reply or not reply.strip():
             reply = "I'm Alex from MyCarCar. I can help you with car rentals and sales. How can I assist you today?"
-            print(f"🔄 [{request_id}] Using empty reply fallback")
+            print(f"🔄 [{request_id}] Using empty reply fallback: '{reply}'")
         
         # Create the final response
         final_response = {
@@ -157,14 +190,17 @@ async def create_chat_completion(request: ChatCompletionRequest):
             }
         }
         
-        print(f"📤 [{request_id}] Final response prepared:")
+        print(f"\n📤 [{request_id}] FINAL RESPONSE PREPARED:")
         print(f"   - Response ID: {response_id}")
         print(f"   - Reply length: {len(reply)} characters")
         print(f"   - Usage tokens: {final_response['usage']}")
+        print(f"   - Stream mode: {request.stream}")
         
         # Return streaming response if requested
         if request.stream:
-            print(f"🌊 [{request_id}] Returning streaming response")
+            print(f"\n🌊 [{request_id}] RETURNING STREAMING RESPONSE")
+            print(f"="*60)
+            
             async def event_stream():
                 try:
                     # Send initial buffer chunk while processing (like ElevenLabs example)
@@ -235,7 +271,8 @@ async def create_chat_completion(request: ChatCompletionRequest):
             return StreamingResponse(event_stream(), media_type="text/event-stream")
         else:
             # Return regular JSON response for non-streaming
-            print(f"📄 [{request_id}] Returning JSON response")
+            print(f"\n📄 [{request_id}] RETURNING JSON RESPONSE")
+            print(f"="*60)
             return JSONResponse(content=final_response)
         
     except HTTPException:
