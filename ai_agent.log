@@ -1,0 +1,12 @@
+2025-09-17 15:10:20,730 - app.service - INFO - USER QUESTION: Hello from local
+2025-09-17 15:10:20,731 - app.service - INFO - MOCK RESPONSE: Hello! I'm here to assist with car rentals and sales. What can I do for you?
+2025-09-17 15:10:20,731 - app.main - INFO - [9203e8b9] USER QUESTION: Hello from local
+2025-09-17 15:10:20,731 - app.main - INFO - [9203e8b9] AGENT RESPONSE: Hello! I'm here to assist with car rentals and sales. What can I do for you?
+2025-09-17 15:10:20,759 - app.service - INFO - USER QUESTION: Hello from parts
+2025-09-17 15:10:20,759 - app.service - INFO - MOCK RESPONSE: Hello! I'm here to assist with car rentals and sales. What can I do for you?
+2025-09-17 15:10:20,759 - app.main - INFO - [fe8a4237] USER QUESTION: Hello from parts
+2025-09-17 15:10:20,759 - app.main - INFO - [fe8a4237] AGENT RESPONSE: Hello! I'm here to assist with car rentals and sales. What can I do for you?
+2025-09-17 15:10:20,773 - app.service - INFO - USER QUESTION: Stream please
+2025-09-17 15:10:20,773 - app.service - INFO - MOCK RESPONSE: Hello! I'm here to help you find the perfect car. Are you looking to rent for a trip or buy a vehicle? Let me know your preferences and I'll guide you through the options.
+2025-09-17 15:10:20,773 - app.main - INFO - [f9abb33f] USER QUESTION: Stream please
+2025-09-17 15:10:20,773 - app.main - INFO - [f9abb33f] AGENT RESPONSE: Hello! I'm here to help you find the perfect car. Are you looking to rent for a trip or buy a vehicle? Let me know your preferences and I'll guide you through the options.
