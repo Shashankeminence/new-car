@@ -307,7 +307,7 @@ async def create_chat_completion(request: ChatCompletionRequest):
             return JSONResponse(content=final_response)
 
     except HTTPException:
-        print(f"❌ [{request_id}] HTTP Exception raised")
+        print(f"❌ [{request_id}] HTTPs Exception raised")
         raise
     except Exception as exc:
         print(f"💥 [{request_id}] Exception occurred: {exc}")
