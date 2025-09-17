@@ -72,6 +72,7 @@ class Message(BaseModel):
         description="The content of the message. Can be a string or list of content parts per OpenAI format",
         example="Hello, I want to rent a car",
     )
+    model_config = ConfigDict(extra="allow")
 
 class ChatCompletionRequest(BaseModel):
     model_config = ConfigDict(extra="allow")

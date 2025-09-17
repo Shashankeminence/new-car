@@ -14,3 +14,7 @@
 2025-09-17 15:25:16,363 - app.service - INFO - MOCK RESPONSE: Hi! Welcome to MyCarCar. Are you looking to rent a car or explore our sales options?
 2025-09-17 15:25:16,363 - app.main - INFO - [92190e69] USER QUESTION: Hello
 2025-09-17 15:25:16,364 - app.main - INFO - [92190e69] AGENT RESPONSE: Hi! Welcome to MyCarCar. Are you looking to rent a car or explore our sales options?
+2025-09-17 15:55:01,004 - app.service - INFO - USER QUESTION: Hello with extras
+2025-09-17 15:55:01,005 - app.service - INFO - MOCK RESPONSE: Hi! Welcome to MyCarCar. Are you looking to rent a car or explore our sales options?
+2025-09-17 15:55:01,005 - app.main - INFO - [217d7b31] USER QUESTION: Hello with extras
+2025-09-17 15:55:01,005 - app.main - INFO - [217d7b31] AGENT RESPONSE: Hi! Welcome to MyCarCar. Are you looking to rent a car or explore our sales options?
