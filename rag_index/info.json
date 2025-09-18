@@ -1,0 +1,4 @@
+{
+  "embedding_model": "text-embedding-3-large",
+  "dim": 3072
+}

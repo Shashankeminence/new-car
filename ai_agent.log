@@ -1,20 +1,86 @@
-2025-09-17 15:10:20,730 - app.service - INFO - USER QUESTION: Hello from local
-2025-09-17 15:10:20,731 - app.service - INFO - MOCK RESPONSE: Hello! I'm here to assist with car rentals and sales. What can I do for you?
-2025-09-17 15:10:20,731 - app.main - INFO - [9203e8b9] USER QUESTION: Hello from local
-2025-09-17 15:10:20,731 - app.main - INFO - [9203e8b9] AGENT RESPONSE: Hello! I'm here to assist with car rentals and sales. What can I do for you?
-2025-09-17 15:10:20,759 - app.service - INFO - USER QUESTION: Hello from parts
-2025-09-17 15:10:20,759 - app.service - INFO - MOCK RESPONSE: Hello! I'm here to assist with car rentals and sales. What can I do for you?
-2025-09-17 15:10:20,759 - app.main - INFO - [fe8a4237] USER QUESTION: Hello from parts
-2025-09-17 15:10:20,759 - app.main - INFO - [fe8a4237] AGENT RESPONSE: Hello! I'm here to assist with car rentals and sales. What can I do for you?
-2025-09-17 15:10:20,773 - app.service - INFO - USER QUESTION: Stream please
-2025-09-17 15:10:20,773 - app.service - INFO - MOCK RESPONSE: Hello! I'm here to help you find the perfect car. Are you looking to rent for a trip or buy a vehicle? Let me know your preferences and I'll guide you through the options.
-2025-09-17 15:10:20,773 - app.main - INFO - [f9abb33f] USER QUESTION: Stream please
-2025-09-17 15:10:20,773 - app.main - INFO - [f9abb33f] AGENT RESPONSE: Hello! I'm here to help you find the perfect car. Are you looking to rent for a trip or buy a vehicle? Let me know your preferences and I'll guide you through the options.
-2025-09-17 15:25:16,359 - app.service - INFO - USER QUESTION: Hello
-2025-09-17 15:25:16,363 - app.service - INFO - MOCK RESPONSE: Hi! Welcome to MyCarCar. Are you looking to rent a car or explore our sales options?
-2025-09-17 15:25:16,363 - app.main - INFO - [92190e69] USER QUESTION: Hello
-2025-09-17 15:25:16,364 - app.main - INFO - [92190e69] AGENT RESPONSE: Hi! Welcome to MyCarCar. Are you looking to rent a car or explore our sales options?
-2025-09-17 15:55:01,004 - app.service - INFO - USER QUESTION: Hello with extras
-2025-09-17 15:55:01,005 - app.service - INFO - MOCK RESPONSE: Hi! Welcome to MyCarCar. Are you looking to rent a car or explore our sales options?
-2025-09-17 15:55:01,005 - app.main - INFO - [217d7b31] USER QUESTION: Hello with extras
-2025-09-17 15:55:01,005 - app.main - INFO - [217d7b31] AGENT RESPONSE: Hi! Welcome to MyCarCar. Are you looking to rent a car or explore our sales options?
+2025-09-18 11:00:39,983 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-18 11:00:40,842 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-18 11:00:40,847 - app.service - INFO - USER QUESTION: Hello, i want to know about eminence technology
+2025-09-18 11:00:40,847 - app.service - INFO - OPENAI RESPONSE: There is no trained data available for this.
+2025-09-18 11:00:40,847 - app.service - INFO - OPENAI USAGE: {'completion_tokens': 9, 'prompt_tokens': 958, 'total_tokens': 967, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}
+2025-09-18 11:00:40,847 - app.main - INFO - [f6a45e39] USER QUESTION: Hello, i want to know about eminence technology
+2025-09-18 11:00:40,847 - app.main - INFO - [f6a45e39] AGENT RESPONSE: There is no trained data available for this.
+2025-09-18 11:04:39,773 - faiss.loader - INFO - Loading faiss with AVX2 support.
+2025-09-18 11:04:39,794 - faiss.loader - INFO - Successfully loaded faiss with AVX2 support.
+2025-09-18 11:04:39,905 - app.service - INFO - OpenAI client initialized successfully
+2025-09-18 11:04:40,955 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-18 11:04:41,927 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-18 11:04:41,964 - app.service - INFO - USER QUESTION: Hello, i want to know about eminence technology
+2025-09-18 11:04:41,965 - app.service - INFO - OPENAI RESPONSE: There is no trained data available for this.
+2025-09-18 11:04:41,965 - app.service - INFO - OPENAI USAGE: {'completion_tokens': 9, 'prompt_tokens': 2672, 'total_tokens': 2681, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}
+2025-09-18 11:04:41,965 - app.main - INFO - [8aeaaf8c] USER QUESTION: Hello, i want to know about eminence technology
+2025-09-18 11:04:41,965 - app.main - INFO - [8aeaaf8c] AGENT RESPONSE: There is no trained data available for this.
+2025-09-18 11:06:15,780 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-18 11:06:17,790 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-18 11:06:17,794 - app.service - INFO - USER QUESTION: What is Eminence Technology?
+2025-09-18 11:06:17,795 - app.service - INFO - OPENAI RESPONSE: Eminence Technology is a leading AI and ML development company that provides intelligence-first solutions. They focus on building scalable AI-native solutions, including agentic systems and generative platforms, for various industries. Their approach combines cutting-edge technologies to solve real-world business challenges, emphasizing tailored products, rapid development, and long-term partnerships.
+2025-09-18 11:06:17,795 - app.service - INFO - OPENAI USAGE: {'completion_tokens': 65, 'prompt_tokens': 2915, 'total_tokens': 2980, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}
+2025-09-18 11:06:17,795 - app.main - INFO - [2b50598b] USER QUESTION: What is Eminence Technology?
+2025-09-18 11:06:17,795 - app.main - INFO - [2b50598b] AGENT RESPONSE: Eminence Technology is a leading AI and ML development company that provides intelligence-first solutions. They focus on building scalable AI-native solutions, including agentic systems and generative platforms, for various industries. Their approach combines cutting-edge technologies to solve real-world business challenges, emphasizing tailored products, rapid development, and long-term partnerships.
+2025-09-18 11:08:45,026 - faiss.loader - INFO - Loading faiss with AVX2 support.
+2025-09-18 11:08:45,042 - faiss.loader - INFO - Successfully loaded faiss with AVX2 support.
+2025-09-18 11:08:45,141 - app.service - INFO - OpenAI client initialized successfully
+2025-09-18 11:08:46,853 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-18 11:08:47,920 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-18 11:08:47,941 - app.service - INFO - USER QUESTION: Hello, i want to know about eminence technology
+2025-09-18 11:08:47,941 - app.service - INFO - OPENAI RESPONSE: There is no trained data available for this.
+2025-09-18 11:08:47,941 - app.service - INFO - OPENAI USAGE: {'completion_tokens': 9, 'prompt_tokens': 2731, 'total_tokens': 2740, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}
+2025-09-18 11:08:47,941 - app.main - INFO - [ebb51a01] USER QUESTION: Hello, i want to know about eminence technology
+2025-09-18 11:08:47,941 - app.main - INFO - [ebb51a01] AGENT RESPONSE: There is no trained data available for this.
+2025-09-18 11:09:41,735 - faiss.loader - INFO - Loading faiss with AVX2 support.
+2025-09-18 11:09:41,751 - faiss.loader - INFO - Successfully loaded faiss with AVX2 support.
+2025-09-18 11:09:41,847 - app.service - INFO - OpenAI client initialized successfully
+2025-09-18 11:09:43,139 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-18 11:09:46,230 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-18 11:09:46,247 - app.service - INFO - USER QUESTION: Hello, i want to know about eminence technology
+2025-09-18 11:09:46,247 - app.service - INFO - OPENAI RESPONSE: Eminence Technology is a company specializing in AI and ML development, focused on creating intelligent enterprise-grade solutions. With over a decade of product expertise, they employ a structured, innovation-led approach to product engineering, which includes strategy alignment, data-led architecture, intelligent system design, model development, full-stack smart development, and optimization.
+
+Their services are tailored to align with business goals, ensuring that AI investments yield measurable outcomes. Eminence Technology has a strong emphasis on transforming ideas into scalable AI-native solutions, and they have received high ratings, being rated 4.9 out of 5.0 by over 800 customers. 
+
+For more information, you can contact them via email at info@eminencetechnology.com or business@eminencetechnology.com, or call +1 978 913 8334 or +91 7710713122.
+2025-09-18 11:09:46,247 - app.service - INFO - OPENAI USAGE: {'completion_tokens': 175, 'prompt_tokens': 2739, 'total_tokens': 2914, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}
+2025-09-18 11:09:46,247 - app.main - INFO - [a971c7bb] USER QUESTION: Hello, i want to know about eminence technology
+2025-09-18 11:09:46,248 - app.main - INFO - [a971c7bb] AGENT RESPONSE: Eminence Technology is a company specializing in AI and ML development, focused on creating intelligent enterprise-grade solutions. With over a decade of product expertise, they employ a structured, innovation-led approach to product engineering, which includes strategy alignment, data-led architecture, intelligent system design, model development, full-stack smart development, and optimization.
+
+Their services are tailored to align with business goals, ensuring that AI investments yield measurable outcomes. Eminence Technology has a strong emphasis on transforming ideas into scalable AI-native solutions, and they have received high ratings, being rated 4.9 out of 5.0 by over 800 customers. 
+
+For more information, you can contact them via email at info@eminencetechnology.com or business@eminencetechnology.com, or call +1 978 913 8334 or +91 7710713122.
+2025-09-18 11:21:29,613 - faiss.loader - INFO - Loading faiss with AVX2 support.
+2025-09-18 11:21:29,629 - faiss.loader - INFO - Successfully loaded faiss with AVX2 support.
+2025-09-18 11:21:29,731 - app.service - INFO - OpenAI client initialized successfully
+2025-09-18 11:21:30,646 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-18 11:21:32,643 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-18 11:21:32,674 - app.service - INFO - USER QUESTION: I wan tto know the phone number of eminence technology
+2025-09-18 11:21:32,674 - app.service - INFO - OPENAI RESPONSE: The phone numbers for Eminence Technology are +1 978 913 8334 and +91 7710713122.
+2025-09-18 11:21:32,674 - app.service - INFO - OPENAI USAGE: {'completion_tokens': 26, 'prompt_tokens': 2896, 'total_tokens': 2922, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}
+2025-09-18 11:21:32,674 - app.main - INFO - [f3a26e9f] USER QUESTION: I wan tto know the phone number of eminence technology
+2025-09-18 11:21:32,674 - app.main - INFO - [f3a26e9f] AGENT RESPONSE: The phone numbers for Eminence Technology are +1 978 913 8334 and +91 7710713122.
+2025-09-18 11:22:32,152 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-18 11:22:35,375 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-18 11:22:35,390 - app.service - INFO - USER QUESTION: What is Eminence technology
+2025-09-18 11:22:35,390 - app.service - INFO - OPENAI RESPONSE: Eminence Technology is a leading AI and ML development company that specializes in engineering enterprise-grade solutions with intelligent systems at their core. They focus on building intelligent digital products through a structured, innovation-led development approach, leveraging deep AI/ML capabilities and a decade of product expertise. Their services include custom AI systems, intelligent automation, and full-stack development, aimed at delivering measurable business outcomes and driving digital transformation.
+2025-09-18 11:22:35,391 - app.service - INFO - OPENAI USAGE: {'completion_tokens': 81, 'prompt_tokens': 3028, 'total_tokens': 3109, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}
+2025-09-18 11:22:35,391 - app.main - INFO - [89d5f483] USER QUESTION: What is Eminence technology
+2025-09-18 11:22:35,391 - app.main - INFO - [89d5f483] AGENT RESPONSE: Eminence Technology is a leading AI and ML development company that specializes in engineering enterprise-grade solutions with intelligent systems at their core. They focus on building intelligent digital products through a structured, innovation-led development approach, leveraging deep AI/ML capabilities and a decade of product expertise. Their services include custom AI systems, intelligent automation, and full-stack development, aimed at delivering measurable business outcomes and driving digital transformation.
+2025-09-18 11:25:23,733 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-18 11:25:27,882 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-18 11:25:27,886 - app.service - INFO - USER QUESTION: What is eminence technology located
+2025-09-18 11:25:27,886 - app.service - INFO - OPENAI RESPONSE: Eminence Technology has multiple locations:
+
+1. Mohali: Plot F5-F6, Second Floor, Phase 8, Industrial Area, Sector 72, Mohali, Punjab 160055, India.
+2. Ludhiana: Near Neela jhanda Gurdwara, Opposite Palta P.C.O., Ludhiana, Punjab 141008, India.
+3. Brooklyn: 631 4th Ave, #3039, Brooklyn, NY 11232, United States.
+4. Brampton: 6th Floor, 8 Nelson St W, Brampton, Ontario, L6X 1B7, Canada.
+2025-09-18 11:25:27,887 - app.service - INFO - OPENAI USAGE: {'completion_tokens': 133, 'prompt_tokens': 2895, 'total_tokens': 3028, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}
+2025-09-18 11:25:27,887 - app.main - INFO - [fd4a3697] USER QUESTION: What is eminence technology located
+2025-09-18 11:25:27,887 - app.main - INFO - [fd4a3697] AGENT RESPONSE: Eminence Technology has multiple locations:
+
+1. Mohali: Plot F5-F6, Second Floor, Phase 8, Industrial Area, Sector 72, Mohali, Punjab 160055, India.
+2. Ludhiana: Near Neela jhanda Gurdwara, Opposite Palta P.C.O., Ludhiana, Punjab 141008, India.
+3. Brooklyn: 631 4th Ave, #3039, Brooklyn, NY 11232, United States.
+4. Brampton: 6th Floor, 8 Nelson St W, Brampton, Ontario, L6X 1B7, Canada.

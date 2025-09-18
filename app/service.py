@@ -9,6 +9,11 @@ from .prompts import get_agent_system_prompt
 # Configure logging
 logger = logging.getLogger(__name__)
 
+CAR_KEYWORDS = {
+    "car", "cars", "rental", "rentals", "rent", "booking", "book", "vehicle", "vehicles",
+    "sedan", "suv", "pickup", "insurance", "roadside", "sale", "sales", "buy", "purchase",
+}
+
 class AgentService:
     def __init__(self, openai_api_key: Optional[str] = None, model: Optional[str] = None) -> None:
         print("🔧 Initializing AgentService...")
@@ -16,6 +21,35 @@ class AgentService:
         mock_env = os.getenv("AGENT_MOCK", "").strip().lower()
         self.mock: bool = mock_env in {"1", "true", "yes", "on"}
         print(f"🎭 Mock mode: {self.mock}")
+
+        # RAG configuration (optional)
+        self.rag_enabled: bool = os.getenv("RAG_ENABLED", "1").strip().lower() in {"1", "true", "yes", "on"}
+        self.rag_index_dir: str = os.getenv("RAG_INDEX_DIR", "./rag_index")
+        self.rag_top_k: int = int(os.getenv("RAG_TOP_K", "5"))
+        self.rag_strict: bool = os.getenv("RAG_STRICT", "1").strip().lower() in {"1", "true", "yes", "on"}
+        self.rag_build_on_start: bool = os.getenv("RAG_BUILD_ON_START", "1").strip().lower() in {"1", "true", "yes", "on"}
+        self.rag_source_file: str = os.getenv("RAG_SOURCE_FILE", "./sample.txt")
+        self.rag = None
+        if self.rag_enabled:
+            try:
+                from .rag import FaissRag  # lazy import
+                self.rag = FaissRag(self.rag_index_dir)
+                try:
+                    self.rag.load()
+                    print(f"📚 RAG enabled. Loaded index from: {self.rag_index_dir}")
+                except Exception as load_err:
+                    print(f"ℹ️ RAG index not found or failed to load: {load_err}")
+                    if self.rag_build_on_start and os.path.exists(self.rag_source_file):
+                        print(f"🧱 Building RAG index from source: {self.rag_source_file}")
+                        self.rag.build_from_file(self.rag_source_file)
+                        self.rag.load()
+                        print(f"✅ RAG index built and loaded from: {self.rag_index_dir}")
+                    else:
+                        print("⚠️ RAG disabled for this run (no index and no build).")
+                        self.rag = None
+            except Exception as e:
+                print(f"⚠️ RAG initialization failed: {e}. Continuing without RAG.")
+                self.rag = None
 
         # Use OpenAI API key
         api_key = openai_api_key or os.getenv("OPENAI_API_KEY")
@@ -45,6 +79,10 @@ class AgentService:
         print(f"🤖 Using model: {self.model}")
         print("✅ AgentService initialization complete")
 
+    def _is_car_domain(self, text: str) -> bool:
+        t = text.lower()
+        return any(kw in t for kw in CAR_KEYWORDS)
+
     def chat(self, user_message: str, context_messages: Optional[List[Dict[str, str]]] = None, elevenlabs_extra_body: Optional[Dict[str, Any]] = None) -> str:
         print(f"\n" + "="*60)
         print(f"💬 AgentService.chat() called")
@@ -59,29 +97,54 @@ class AgentService:
                 print(f"   [{i+1}] {ctx['role']}: {ctx['content'][:100]}{'...' if len(ctx['content']) > 100 else ''}")
         
         print(f"\n🔧 ELEVENLABS EXTRA BODY: {elevenlabs_extra_body}")
+        print(f"🔎 RAG enabled: {self.rag_enabled}, index: {self.rag_index_dir}, top_k: {self.rag_top_k}, strict: {self.rag_strict}")
         
         if self.mock:
             print(f"\n🎭 USING MOCK RESPONSE MODE")
             response = self._get_mock_response(user_message)
-            print(f"\n🎭 MOCK RESPONSE GENERATED:")
-            print(f"="*60)
-            print(f"📝 Response: '{response}'")
-            print(f"📊 Response stats:")
-            print(f"   - Length: {len(response)} characters")
-            print(f"   - Word count: {len(response.split())} words")
-            print(f"   - Lines: {len(response.splitlines())} lines")
-            print(f"="*60)
-            
-            # Log to file
             logger.info(f"USER QUESTION: {user_message}")
             logger.info(f"MOCK RESPONSE: {response}")
-            
             return response
         
         try:
-            messages: List[Dict[str, str]] = [
-                {"role": "system", "content": get_agent_system_prompt()},
-            ]
+            messages: List[Dict[str, str]] = []
+            is_car = self._is_car_domain(user_message)
+            use_rag = (self.rag_enabled and self.rag is not None) and not is_car
+
+            if use_rag:
+                try:
+                    rag_context = self.rag.build_context(user_message, top_k=self.rag_top_k)
+                    print("📥 RAG context built:")
+                    print(rag_context[:800] + ("..." if len(rag_context) > 800 else ""))
+                    if self.rag_strict and not rag_context.strip():
+                        print("⚠️ RAG strict mode: no relevant context found")
+                        return "There is no trained data available for this."
+
+                    # Choose prompt style based on strictness
+                    if self.rag_strict:
+                        # Neutral, digits-allowed, strict-context prompt
+                        rag_system = (
+                            "You answer strictly and only using the provided CONTEXT. "
+                            "If the answer is not contained in the context, respond exactly with: There is no trained data available for this.\n\n"
+                            f"CONTEXT:\n{rag_context}"
+                        )
+                    else:
+                        # Softer prompt: prefer context but allow concise general knowledge when needed
+                        rag_system = (
+                            "Use the following CONTEXT to answer the user's question. Prefer facts from the CONTEXT. "
+                            "If some details are not explicitly covered, you may answer briefly using reasonable general knowledge and inference. "
+                            "Be concise and accurate.\n\n"
+                            f"CONTEXT:\n{rag_context}"
+                        )
+                    system_prompt = rag_system
+                except Exception as e:
+                    print(f"⚠️ RAG retrieval failed: {e}. Falling back to non-RAG domain handling.")
+                    system_prompt = get_agent_system_prompt()
+            else:
+                # Car domain or RAG unavailable → use original persona
+                system_prompt = get_agent_system_prompt()
+
+            messages.append({"role": "system", "content": system_prompt})
             if context_messages:
                 messages.extend(context_messages)
             messages.append({"role": "user", "content": user_message})
@@ -91,11 +154,10 @@ class AgentService:
             for i, msg in enumerate(messages):
                 print(f"   Message {i+1}:")
                 print(f"   ├─ Role: '{msg['role']}'")
-                print(f"   ├─ Content: '{msg['content'][:100]}{'...' if len(msg['content']) > 100 else ''}'")
+                print(f"   ├─ Content: '{msg['content'][:200]}{'...' if len(msg['content']) > 200 else ''}'")
                 print(f"   └─ Length: {len(msg['content'])} characters")
                 print()
 
-            # Log ElevenLabs extra body for debugging
             if elevenlabs_extra_body:
                 print(f"🔧 ElevenLabs extra body: {elevenlabs_extra_body}")
 
@@ -104,12 +166,11 @@ class AgentService:
             print(f"   - Temperature: 0.3")
             print(f"   - Max tokens: 500")
             
-            # Call OpenAI API
             response = self.client.chat.completions.create(  # type: ignore
                 model=self.model,
                 messages=messages,
                 temperature=0.3,
-                max_tokens=500,  # Limit tokens for faster response
+                max_tokens=500,
             )
             content = response.choices[0].message.content if response.choices else ""
             
@@ -124,7 +185,6 @@ class AgentService:
             print(f"   - Usage: {response.usage.dict() if hasattr(response, 'usage') and response.usage else 'N/A'}")
             print(f"="*60)
             
-            # Log to file
             logger.info(f"USER QUESTION: {user_message}")
             logger.info(f"OPENAI RESPONSE: {content}")
             if hasattr(response, 'usage') and response.usage:
@@ -161,13 +221,12 @@ class AgentService:
         elif any(word in message_lower for word in ["buy", "purchase", "buying"]):
             response = "I'd be happy to help you find a car to purchase. What's your budget range and what type of vehicle interests you?"
         else:
-            response = "Hi! I'm Alex from MyCarCar. I can help you with car rentals and sales. How can I assist you today?"
+            response = "There is no trained data available for this."
         
         print(f"Fallback response: '{response}'")
         print(f"Response length: {len(response)} characters")
         print(f"-" * 40)
         
-        # Log to file
         logger.info(f"FALLBACK - USER QUESTION: {user_message}")
         logger.info(f"FALLBACK - RESPONSE: {response}")
         
@@ -250,12 +309,7 @@ class AgentService:
         
         # Default contextual response
         else:
-            responses = [
-                "I'm Alex from MyCarCar and I can help with rentals or car sales. Tell me what you're looking for and your city and dates if renting. I'll find clear options and next steps for you.",
-                "Hi! I can assist you with car rentals or purchases. What type of vehicle are you interested in and when do you need it?",
-                "Hello! I'm here to help you find the perfect car. Are you looking to rent for a trip or buy a vehicle? Let me know your preferences and I'll guide you through the options."
-            ]
-            response = random.choice(responses)
+            response = "There is no trained data available for this."
         
         print(f"Mock response: '{response[:100]}{'...' if len(response) > 100 else ''}'")
         print(f"Response length: {len(response)} characters")
